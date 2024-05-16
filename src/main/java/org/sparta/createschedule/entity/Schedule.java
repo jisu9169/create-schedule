@@ -6,16 +6,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.sparta.createschedule.dto.ScheduleRequestDto;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class Schedule extends Timestamped{
+public class Schedule extends Timestamped {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
