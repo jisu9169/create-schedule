@@ -11,6 +11,7 @@ import org.sparta.createschedule.entity.Schedule;
 @Builder
 public class ScheduleResponseDto {
 
+  private Long id;
   private String title;
   private String description;
   private String manager;
@@ -20,6 +21,7 @@ public class ScheduleResponseDto {
 
   public static ScheduleResponseDto from(Schedule schedule) {
     return ScheduleResponseDto.builder()
+        .id(schedule.getId())
         .title(schedule.getTitle())
         .description(schedule.getDescription())
         .manager(schedule.getManager())
@@ -30,6 +32,7 @@ public class ScheduleResponseDto {
 
   public static ScheduleResponseDto from(ScheduleRequestDto scheduleRequestDto) {
     return ScheduleResponseDto.builder()
+        .id(scheduleRequestDto.getId())
         .title(scheduleRequestDto.getTitle())
         .description(scheduleRequestDto.getDescription())
         .manager(scheduleRequestDto.getManager())
