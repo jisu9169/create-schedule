@@ -37,24 +37,29 @@ public class ScheduleService {
   // 스케줄 수정
   @Transactional
   public ScheduleResponseDto updateSchedule(ScheduleRequestDto scheduleRequestDto) {
-    Schedule schedule = findBySchedule(scheduleRequestDto.getId());
-    if (Objects.equals(scheduleRequestDto.getPassword(), "") ||
-        !Objects.equals(scheduleRequestDto.getPassword(), schedule.getPassword())) {
-      throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");
-    }
+    Schedule schedule = validatePassword(scheduleRequestDto);
     schedule.update(scheduleRequestDto);
-
     return ScheduleResponseDto.from(schedule);
   }
 
   //스케줄 삭제
   @Transactional
   public ScheduleResponseDto deleteSchedule(ScheduleRequestDto scheduleRequestDto) {
-    Schedule schedule = findBySchedule(scheduleRequestDto.getId());
+    Schedule schedule = validatePassword(scheduleRequestDto);
     scheduleRepository.delete(schedule);
     return ScheduleResponseDto.from(scheduleRequestDto);
   }
 
+  // 비밀번호 검증
+  private Schedule validatePassword(ScheduleRequestDto scheduleRequestDto) {
+    Schedule schedule = findBySchedule(scheduleRequestDto.getId());
+    if (Objects.equals(scheduleRequestDto.getPassword(), "") ||
+        !Objects.equals(scheduleRequestDto.getPassword(), schedule.getPassword())) {
+      throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");
+    }
+
+    return schedule;
+  }
 
   // 스케줄 조회
   private Schedule findBySchedule(Long id) {
