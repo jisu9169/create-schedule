@@ -43,7 +43,8 @@ public class ScheduleService {
       throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");
     }
     schedule.update(scheduleRequestDto);
-    return ScheduleResponseDto.from(scheduleRequestDto);
+
+    return ScheduleResponseDto.from(schedule);
   }
 
   //스케줄 삭제
