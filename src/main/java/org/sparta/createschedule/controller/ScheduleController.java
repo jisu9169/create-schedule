@@ -33,5 +33,10 @@ public class ScheduleController {
     return ResponseEntity.ok().body(scheduleService.getAllSchedule());
   }
 
+  @PatchMapping("/patch")
+  public ResponseEntity<ScheduleResponseDto> UpdateSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+    return ResponseEntity.ok().body(scheduleService.updateSchedule(scheduleRequestDto));
+  }
+
 
 }
