@@ -23,6 +23,8 @@ public class ScheduleResponseDto {
         .title(schedule.getTitle())
         .description(schedule.getDescription())
         .manager(schedule.getManager())
+        .createdAt(schedule.getCreateAt())
+        .modifiedAt(schedule.getModifiedAt())
         .build();
   }
 
@@ -31,6 +33,8 @@ public class ScheduleResponseDto {
         .title(scheduleRequestDto.getTitle())
         .description(scheduleRequestDto.getDescription())
         .manager(scheduleRequestDto.getManager())
+        .createdAt(scheduleRequestDto.getCreatedAt())
+        .modifiedAt(scheduleRequestDto.getModifiedAt())
         .build();
   }
 }
