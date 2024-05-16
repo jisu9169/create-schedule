@@ -47,7 +47,12 @@ public class ScheduleService {
   }
 
   //스케줄 삭제
-
+  @Transactional
+  public ScheduleResponseDto deleteSchedule(ScheduleRequestDto scheduleRequestDto) {
+    Schedule schedule = findBySchedule(scheduleRequestDto.getId());
+    scheduleRepository.delete(schedule);
+    return ScheduleResponseDto.from(scheduleRequestDto);
+  }
 
 
   // 스케줄 조회

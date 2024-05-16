@@ -38,5 +38,8 @@ public class ScheduleController {
     return ResponseEntity.ok().body(scheduleService.updateSchedule(scheduleRequestDto));
   }
 
-
+  @DeleteMapping("/delete")
+  public ResponseEntity<ScheduleResponseDto> DeleteSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+    return ResponseEntity.ok().body(scheduleService.deleteSchedule(scheduleRequestDto));
+  }
 }
