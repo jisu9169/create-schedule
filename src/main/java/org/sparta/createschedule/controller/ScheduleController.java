@@ -2,6 +2,7 @@ package org.sparta.createschedule.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sparta.createschedule.dto.ScheduleRequestDto;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,7 +28,7 @@ public class ScheduleController {
   @PostMapping("/create")
   @Operation(summary = "일정 생성", description = "일정 생성 API")
   public ResponseEntity<ScheduleResponseDto> CreateSchedule(
-      @RequestBody ScheduleRequestDto scheduleRequestDto) {
+      @Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
     return ResponseEntity.ok().body(scheduleService.save(scheduleRequestDto));
   }
 
@@ -46,13 +46,13 @@ public class ScheduleController {
 
   @PatchMapping("/patch")
   @Operation(summary = "일정 수정", description = "일정 수정 API")
-  public ResponseEntity<ScheduleResponseDto> UpdateSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+  public ResponseEntity<ScheduleResponseDto> UpdateSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
     return ResponseEntity.ok().body(scheduleService.updateSchedule(scheduleRequestDto));
   }
 
   @DeleteMapping("/delete")
   @Operation(summary = "일정 삭제", description = "일정 삭제 API")
-  public ResponseEntity<ScheduleResponseDto> DeleteSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+  public ResponseEntity<ScheduleResponseDto> DeleteSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
     return ResponseEntity.ok().body(scheduleService.deleteSchedule(scheduleRequestDto));
   }
 }
