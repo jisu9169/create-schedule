@@ -6,7 +6,7 @@
 
 [3. API 명세서]( #3-api-명세서 )
 
-[3. ERD]( #-4-erd)
+[3. ERD]( #4-erd)
 
 
 ## 1. 필수 요구 사항
@@ -70,10 +70,11 @@
 ## 3. API 명세서
 
 ---
-
-![img.png](img.png)
+![img_2.png](img_2.png)
 
 ## 4. ERD
+
 ---
+
 ![img_1.png](img_1.png)
 
