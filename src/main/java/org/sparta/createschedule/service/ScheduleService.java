@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.sparta.createschedule.dto.ScheduleRequestDto;
 import org.sparta.createschedule.dto.ScheduleResponseDto;
 import org.sparta.createschedule.entity.Schedule;
+import org.sparta.createschedule.exception.ErrorStatus;
+import org.sparta.createschedule.exception.ScheduleException;
 import org.sparta.createschedule.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +63,7 @@ public class ScheduleService {
     Schedule schedule = findBySchedule(scheduleRequestDto.getId());
     if (Objects.equals(scheduleRequestDto.getPassword(), "") ||
         !Objects.equals(scheduleRequestDto.getPassword(), schedule.getPassword())) {
-      throw new IllegalArgumentException("비밀번호가 잘못되었습니다.");
+      throw new ScheduleException(ErrorStatus.IS_NOT_PASSWORD);
     }
 
     return schedule;
@@ -70,7 +72,7 @@ public class ScheduleService {
   // 스케줄 조회
   private Schedule findBySchedule(Long id) {
     return scheduleRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 스케줄입니다."));
+        .orElseThrow(() -> new ScheduleException(ErrorStatus.ID_NOT_FOUND));
   }
 
 
