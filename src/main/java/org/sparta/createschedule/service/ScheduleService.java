@@ -28,6 +28,12 @@ public class ScheduleService {
     return ScheduleResponseDto.from(saveSchedule);
   }
 
+  // 스케줄 조회
+  public ScheduleResponseDto getSchedule(Long id) {
+    Schedule schedule = findBySchedule(id);
+    return ScheduleResponseDto.from(schedule);
+  }
+
   //스케줄 전체 조회
   public List<ScheduleResponseDto> getAllSchedule() {
     return scheduleRepository.findAllByOrderByModifiedAtDesc().stream()
@@ -66,4 +72,6 @@ public class ScheduleService {
     return scheduleRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 스케줄입니다."));
   }
+
+
 }
