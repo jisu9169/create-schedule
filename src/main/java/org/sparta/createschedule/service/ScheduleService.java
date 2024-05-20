@@ -61,8 +61,11 @@ public class ScheduleService {
   // 비밀번호 검증
   private Schedule validatePassword(ScheduleRequestDto scheduleRequestDto) {
     Schedule schedule = findBySchedule(scheduleRequestDto.getId());
-    if (Objects.equals(scheduleRequestDto.getPassword(), "") ||
-        !Objects.equals(scheduleRequestDto.getPassword(), schedule.getPassword())) {
+    if (Objects.equals(scheduleRequestDto.getPassword(), "")) {
+      throw new ScheduleException(ErrorStatus.IS_NOT_PASSWORD);
+    }
+
+    if (!Objects.equals(scheduleRequestDto.getPassword(), schedule.getPassword())) {
       throw new ScheduleException(ErrorStatus.IS_NOT_PASSWORD);
     }
 
