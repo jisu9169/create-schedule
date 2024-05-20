@@ -36,4 +36,12 @@ public class Schedule extends Timestamped {
     this.description = scheduleRequestDto.getDescription();
     this.manager = scheduleRequestDto.getManager();
   }
+
+  public Schedule save(ScheduleRequestDto dto) {
+    this.title = dto.getTitle();
+    this.description = dto.getDescription();
+    this.manager = dto.getManager();
+    this.password = dto.getPassword();
+    return this;
+  }
 }

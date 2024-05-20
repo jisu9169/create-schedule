@@ -31,30 +31,36 @@ public class ScheduleController {
   @Operation(summary = "일정 생성", description = "일정 생성 API")
   public ResponseEntity<CommonResponse<ScheduleResponseDto>> CreateSchedule(
       @Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
+    ScheduleResponseDto scheduleResponseDto = ScheduleResponseDto.from(
+        scheduleService.save(scheduleRequestDto));
     return ResponseEntity.ok().body(CommonResponse.<ScheduleResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
         .msg("생성이 완료 되었습니다.")
-        .data(scheduleService.save(scheduleRequestDto))
+        .data(scheduleResponseDto)
         .build());
   }
 
   @GetMapping("/{id}")
   @Operation(summary = "일정 단건 조회", description = "일정 단건 조회 API")
   public ResponseEntity<CommonResponse<ScheduleResponseDto>> getSchedule(@PathVariable Long id) {
+    ScheduleResponseDto scheduleResponseDto = ScheduleResponseDto.from(
+        scheduleService.getSchedule(id));
     return ResponseEntity.ok().body(CommonResponse.<ScheduleResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
         .msg("조회가 완료 되었습니다.")
-        .data(scheduleService.getSchedule(id))
+        .data(scheduleResponseDto)
         .build());
   }
 
   @GetMapping
   @Operation(summary = "일정 모두 조회", description = "일정 모두 조회 API")
   public ResponseEntity<CommonResponse<List<ScheduleResponseDto>>> getAllSchedule() {
+    List<ScheduleResponseDto> scheduleResponseDtoList = scheduleService.getAllSchedule().stream()
+        .map(ScheduleResponseDto::from).toList();
     return ResponseEntity.ok().body(CommonResponse.<List<ScheduleResponseDto>>builder()
         .statusCode(HttpStatus.OK.value())
         .msg("전체 조회가 완료 되었습니다.")
-        .data(scheduleService.getAllSchedule())
+        .data(scheduleResponseDtoList)
         .build());
   }
 
@@ -62,10 +68,12 @@ public class ScheduleController {
   @Operation(summary = "일정 수정", description = "일정 수정 API")
   public ResponseEntity<CommonResponse<ScheduleResponseDto>> UpdateSchedule(
       @Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
+    ScheduleResponseDto scheduleResponseDto = ScheduleResponseDto.from(
+        scheduleService.updateSchedule(scheduleRequestDto));
     return ResponseEntity.ok().body(CommonResponse.<ScheduleResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
         .msg("수정이 완료 되었습니다.")
-        .data(scheduleService.updateSchedule(scheduleRequestDto))
+        .data(scheduleResponseDto)
         .build());
   }
 
@@ -73,10 +81,12 @@ public class ScheduleController {
   @Operation(summary = "일정 삭제", description = "일정 삭제 API")
   public ResponseEntity<CommonResponse<ScheduleResponseDto>> DeleteSchedule(
       @Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
+    ScheduleResponseDto scheduleResponseDto = ScheduleResponseDto.from(
+        scheduleService.deleteSchedule(scheduleRequestDto));
     return ResponseEntity.ok().body(CommonResponse.<ScheduleResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
         .msg("삭제가 완료 되었습니다.")
-        .data(scheduleService.deleteSchedule(scheduleRequestDto))
+        .data(scheduleResponseDto)
         .build());
   }
 }

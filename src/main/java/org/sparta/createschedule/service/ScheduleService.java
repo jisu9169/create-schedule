@@ -19,43 +19,35 @@ public class ScheduleService {
   private final ScheduleRepository scheduleRepository;
 
   // 스케줄 생성
-  public ScheduleResponseDto save(ScheduleRequestDto scheduleRequestDto) {
-    Schedule saveSchedule = scheduleRepository.save(Schedule.builder()
-        .title(scheduleRequestDto.getTitle())
-        .description(scheduleRequestDto.getDescription())
-        .manager(scheduleRequestDto.getManager())
-        .password(scheduleRequestDto.getPassword())
-        .build());
-
-    return ScheduleResponseDto.from(saveSchedule);
+  public Schedule save(ScheduleRequestDto scheduleRequestDto) {
+    Schedule schedule = new Schedule();
+    return scheduleRepository.save(schedule.save(scheduleRequestDto));
   }
 
   // 스케줄 조회
-  public ScheduleResponseDto getSchedule(Long id) {
-    Schedule schedule = findBySchedule(id);
-    return ScheduleResponseDto.from(schedule);
+  public Schedule getSchedule(Long id) {
+    return findBySchedule(id);
   }
 
   //스케줄 전체 조회
-  public List<ScheduleResponseDto> getAllSchedule() {
-    return scheduleRepository.findAllByOrderByModifiedAtDesc().stream()
-        .map(ScheduleResponseDto::from).toList();
+  public List<Schedule> getAllSchedule() {
+    return scheduleRepository.findAllByOrderByModifiedAtDesc();
   }
 
   // 스케줄 수정
   @Transactional
-  public ScheduleResponseDto updateSchedule(ScheduleRequestDto scheduleRequestDto) {
+  public Schedule updateSchedule(ScheduleRequestDto scheduleRequestDto) {
     Schedule schedule = validatePassword(scheduleRequestDto);
     schedule.update(scheduleRequestDto);
-    return ScheduleResponseDto.from(schedule);
+    return schedule;
   }
 
   //스케줄 삭제
   @Transactional
-  public ScheduleResponseDto deleteSchedule(ScheduleRequestDto scheduleRequestDto) {
+  public Schedule deleteSchedule(ScheduleRequestDto scheduleRequestDto) {
     Schedule schedule = validatePassword(scheduleRequestDto);
     scheduleRepository.delete(schedule);
-    return ScheduleResponseDto.from(scheduleRequestDto);
+    return schedule;
   }
 
   // 비밀번호 검증
@@ -77,6 +69,4 @@ public class ScheduleService {
     return scheduleRepository.findById(id)
         .orElseThrow(() -> new ScheduleException(ErrorStatus.ID_NOT_FOUND));
   }
-
-
 }
