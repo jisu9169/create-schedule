@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/schedule")
+@RequestMapping("/schedules")
 public class ScheduleController {
 
   private final ScheduleService scheduleService;
@@ -38,7 +38,7 @@ public class ScheduleController {
         .build());
   }
 
-  @GetMapping("/get/{id}")
+  @GetMapping("/{id}")
   @Operation(summary = "일정 단건 조회", description = "일정 단건 조회 API")
   public ResponseEntity<CommonResponse<ScheduleResponseDto>> getSchedule(@PathVariable Long id) {
     return ResponseEntity.ok().body(CommonResponse.<ScheduleResponseDto>builder()
@@ -48,7 +48,7 @@ public class ScheduleController {
         .build());
   }
 
-  @GetMapping("/getall")
+  @GetMapping
   @Operation(summary = "일정 모두 조회", description = "일정 모두 조회 API")
   public ResponseEntity<CommonResponse<List<ScheduleResponseDto>>> getAllSchedule() {
     return ResponseEntity.ok().body(CommonResponse.<List<ScheduleResponseDto>>builder()
