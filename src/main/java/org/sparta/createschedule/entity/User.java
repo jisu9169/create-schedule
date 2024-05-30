@@ -7,6 +7,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +37,9 @@ public class User extends Timestamped {
   @Column(nullable = false)
   @Enumerated(value = EnumType.STRING)
   private UserRoleEnum role;
+
+  @OneToMany
+  private List<Comment> commentList = new ArrayList<>();
 
   public User(SignRequestDto requestDto, UserRoleEnum role) {
     this.nickName = requestDto.getNickname();

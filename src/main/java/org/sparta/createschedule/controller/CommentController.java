@@ -5,9 +5,11 @@ import org.sparta.createschedule.common.CommonResponse;
 import org.sparta.createschedule.dto.CommentRequestDto;
 import org.sparta.createschedule.dto.CommentResponseDto;
 import org.sparta.createschedule.dto.CommentUpdateRequestDto;
+import org.sparta.createschedule.security.UserDetailsImpl;
 import org.sparta.createschedule.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +27,10 @@ public class CommentController {
 
   @PostMapping("/comments")
   public ResponseEntity<CommonResponse<CommentResponseDto>> addComment(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable Long scheduleId, @RequestBody CommentRequestDto requestDto) {
-    CommentResponseDto responseDto = commentService.addComment(scheduleId, requestDto);
+    CommentResponseDto responseDto = commentService.addComment(scheduleId, userDetails.getUser(),
+        requestDto);
 
     return ResponseEntity.ok().body(CommonResponse.<CommentResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
@@ -37,8 +41,10 @@ public class CommentController {
 
   @PatchMapping("/comments/patch")
   public ResponseEntity<CommonResponse<CommentResponseDto>> updateComment(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable Long scheduleId, @RequestBody CommentUpdateRequestDto requestDto) {
-    CommentResponseDto responseDto = commentService.updateComment(scheduleId, requestDto);
+    CommentResponseDto responseDto = commentService.updateComment(scheduleId, userDetails.getUser(),
+        requestDto);
 
     return ResponseEntity.ok().body(CommonResponse.<CommentResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
@@ -49,8 +55,9 @@ public class CommentController {
 
   @DeleteMapping("/comments/{commentId}/delete")
   public ResponseEntity<CommonResponse<CommentResponseDto>> deleteComment(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable Long scheduleId, @PathVariable Long commentId) {
-    commentService.deleteComment(scheduleId, commentId);
+    commentService.deleteComment(scheduleId, userDetails.getUser(), commentId);
     return ResponseEntity.ok().body(CommonResponse.<CommentResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
         .msg("댓글 삭제 완료!!")

@@ -9,6 +9,7 @@ import org.sparta.createschedule.dto.CommentResponseDto;
 import org.sparta.createschedule.dto.CommentUpdateRequestDto;
 import org.sparta.createschedule.entity.Comment;
 import org.sparta.createschedule.entity.Schedule;
+import org.sparta.createschedule.entity.User;
 import org.sparta.createschedule.exception.ErrorStatus;
 import org.sparta.createschedule.exception.ScheduleException;
 import org.sparta.createschedule.repository.CommentRepository;
@@ -23,7 +24,8 @@ public class CommentService {
   private final CommentRepository commentRepository;
   private final ScheduleRepository scheduleRepository;
 
-  public CommentResponseDto addComment(long scheduleId, CommentRequestDto requestDto) {
+  public CommentResponseDto addComment(long scheduleId, User user,
+      CommentRequestDto requestDto) {
     Schedule schedule = ScheduleValidation(scheduleId);
     if (Objects.equals(requestDto.getComment(), "")) {
       throw new ScheduleException(ErrorStatus.COMMENT_NOT_FOUND);
@@ -32,33 +34,33 @@ public class CommentService {
       throw new ScheduleException(ErrorStatus.COMMENT_NOT_FOUND);
     }
 
-    Comment comment = commentRepository.save(new Comment(schedule, requestDto));
+    Comment comment = commentRepository.save(new Comment(schedule, user, requestDto));
 
     return new CommentResponseDto(scheduleId, comment);
 
   }
 
   @Transactional
-  public CommentResponseDto updateComment(Long scheduleId, CommentUpdateRequestDto requestDto) {
+  public CommentResponseDto updateComment(Long scheduleId, User user, CommentUpdateRequestDto requestDto) {
     Schedule schedule = ScheduleValidation(scheduleId);
-    Comment comment = CommentValidation(requestDto.getCommentId(), schedule);
+    Comment comment = CommentValidation(requestDto.getCommentId(), user, schedule);
     comment.update(requestDto);
 
     return new CommentResponseDto(schedule.getId(), comment);
   }
 
-  public void deleteComment(Long scheduleId, Long commentId) {
+  public void deleteComment(Long scheduleId,User user, Long commentId) {
     Schedule schedule = ScheduleValidation(scheduleId);
     Optional<Comment> isComment = commentRepository.findByIdAndSchedule(commentId, schedule);
-    Comment comment = CommentValidation(commentId, schedule);
+    Comment comment = CommentValidation(commentId, user, schedule);
     if (isComment.isEmpty()) {
       throw new ScheduleException(ErrorStatus.COMMENT_NOT_FOUND);
     }
     commentRepository.delete(comment);
   }
 
-  private Comment CommentValidation(Long commentId, Schedule schedule) {
-    Optional<Comment> isComment = commentRepository.findByIdAndSchedule(commentId, schedule);
+  private Comment CommentValidation(Long commentId, User user, Schedule schedule) {
+    Optional<Comment> isComment = commentRepository.findByIdAndUserAndSchedule(commentId, user,schedule);
     if (isComment.isEmpty()) {
       throw new ScheduleException(ErrorStatus.COMMENT_NOT_FOUND);
     }
