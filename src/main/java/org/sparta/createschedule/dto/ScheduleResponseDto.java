@@ -18,26 +18,12 @@ public class ScheduleResponseDto {
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
 
-
-  public static ScheduleResponseDto from(Schedule schedule) {
-    return ScheduleResponseDto.builder()
-        .id(schedule.getId())
-        .title(schedule.getTitle())
-        .description(schedule.getDescription())
-        .manager(schedule.getManager())
-        .createdAt(schedule.getCreateAt())
-        .modifiedAt(schedule.getModifiedAt())
-        .build();
-  }
-
-  public static ScheduleResponseDto from(ScheduleRequestDto scheduleRequestDto) {
-    return ScheduleResponseDto.builder()
-        .id(scheduleRequestDto.getId())
-        .title(scheduleRequestDto.getTitle())
-        .description(scheduleRequestDto.getDescription())
-        .manager(scheduleRequestDto.getManager())
-        .createdAt(scheduleRequestDto.getCreatedAt())
-        .modifiedAt(scheduleRequestDto.getModifiedAt())
-        .build();
+  public ScheduleResponseDto(Schedule schedule) {
+    this.id = schedule.getId();
+    this.title = schedule.getTitle();
+    this.description = schedule.getDescription();
+    this.manager = schedule.getManager();
+    this.createdAt =  schedule.getCreateAt();
+    this.modifiedAt =  schedule.getModifiedAt();
   }
 }

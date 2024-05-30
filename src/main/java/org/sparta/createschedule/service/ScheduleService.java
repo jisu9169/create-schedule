@@ -19,49 +19,52 @@ public class ScheduleService {
   private final ScheduleRepository scheduleRepository;
 
   // 스케줄 생성
-  public Schedule save(ScheduleRequestDto scheduleRequestDto) {
-    Schedule schedule = new Schedule();
-    return scheduleRepository.save(schedule.save(scheduleRequestDto));
+  public ScheduleResponseDto save(ScheduleRequestDto requestDto) {
+    Schedule schedule = scheduleRepository.save(new Schedule(requestDto));
+    return new ScheduleResponseDto(schedule);
   }
 
   // 스케줄 조회
-  public Schedule getSchedule(Long id) {
-    return findBySchedule(id);
+  public ScheduleResponseDto getSchedule(Long id) {
+    return new ScheduleResponseDto(findBySchedule(id));
   }
 
   //스케줄 전체 조회
-  public List<Schedule> getAllSchedule() {
-    return scheduleRepository.findAllByOrderByModifiedAtDesc();
+  public List<ScheduleResponseDto> getAllSchedule() {
+    return scheduleRepository.findAllByOrderByModifiedAtDesc().stream()
+        .map(ScheduleResponseDto::new).toList();
   }
 
   // 스케줄 수정
   @Transactional
-  public Schedule updateSchedule(ScheduleRequestDto scheduleRequestDto) {
-    Schedule schedule = validatePassword(scheduleRequestDto);
-    schedule.update(scheduleRequestDto);
-    return schedule;
+  public ScheduleResponseDto updateSchedule(ScheduleRequestDto requestDto) {
+    if (!validatePassword(requestDto)) {
+      throw new ScheduleException(ErrorStatus.IS_NOT_PASSWORD);
+    }
+
+    Schedule schedules = scheduleRepository.save(new Schedule(requestDto));
+    return new ScheduleResponseDto(schedules);
   }
 
   //스케줄 삭제
   @Transactional
-  public Schedule deleteSchedule(ScheduleRequestDto scheduleRequestDto) {
-    Schedule schedule = validatePassword(scheduleRequestDto);
-    scheduleRepository.delete(schedule);
-    return schedule;
+  public void deleteSchedule(ScheduleRequestDto requestDto) {
+    if (!validatePassword(requestDto)) {
+      throw new ScheduleException(ErrorStatus.IS_NOT_PASSWORD);
+    }
+    scheduleRepository.delete(new Schedule(requestDto));
   }
 
   // 비밀번호 검증
-  private Schedule validatePassword(ScheduleRequestDto scheduleRequestDto) {
+  private boolean validatePassword(ScheduleRequestDto scheduleRequestDto) {
     Schedule schedule = findBySchedule(scheduleRequestDto.getId());
     if (Objects.equals(scheduleRequestDto.getPassword(), "")) {
-      throw new ScheduleException(ErrorStatus.IS_NOT_PASSWORD);
+      return false;
     }
-
     if (!Objects.equals(scheduleRequestDto.getPassword(), schedule.getPassword())) {
-      throw new ScheduleException(ErrorStatus.IS_NOT_PASSWORD);
+      return false;
     }
-
-    return schedule;
+    return true;
   }
 
   // 스케줄 조회

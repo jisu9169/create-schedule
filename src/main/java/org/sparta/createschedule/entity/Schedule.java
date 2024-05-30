@@ -31,17 +31,11 @@ public class Schedule extends Timestamped {
   @Column(name = "password", nullable = false)
   private String password;
 
-  public void update(ScheduleRequestDto scheduleRequestDto) {
+  public Schedule(ScheduleRequestDto scheduleRequestDto) {
     this.title = scheduleRequestDto.getTitle();
     this.description = scheduleRequestDto.getDescription();
     this.manager = scheduleRequestDto.getManager();
+    this.password = scheduleRequestDto.getPassword();
   }
 
-  public Schedule save(ScheduleRequestDto dto) {
-    this.title = dto.getTitle();
-    this.description = dto.getDescription();
-    this.manager = dto.getManager();
-    this.password = dto.getPassword();
-    return this;
-  }
 }
