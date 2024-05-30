@@ -41,16 +41,29 @@ public class CommentService {
   @Transactional
   public CommentResponseDto updateComment(Long scheduleId, CommentUpdateRequestDto requestDto) {
     Schedule schedule = ScheduleValidation(scheduleId);
-    Optional<Comment> isComment = commentRepository.findByIdAndSchedule(requestDto.getCommentId(), schedule);
-    if (isComment.isEmpty()) {
-      throw new ScheduleException(ErrorStatus.COMMENT_NOT_FOUND);
-    }
-    Comment comment = isComment.get();
+    Comment comment = CommentValidation(requestDto.getCommentId(), schedule);
     comment.update(requestDto);
 
     return new CommentResponseDto(schedule.getId(), comment);
   }
 
+  public void deleteComment(Long scheduleId, Long commentId) {
+    Schedule schedule = ScheduleValidation(scheduleId);
+    Optional<Comment> isComment = commentRepository.findByIdAndSchedule(commentId, schedule);
+    Comment comment = CommentValidation(commentId, schedule);
+    if (isComment.isEmpty()) {
+      throw new ScheduleException(ErrorStatus.COMMENT_NOT_FOUND);
+    }
+    commentRepository.delete(comment);
+  }
+
+  private Comment CommentValidation(Long commentId, Schedule schedule) {
+    Optional<Comment> isComment = commentRepository.findByIdAndSchedule(commentId, schedule);
+    if (isComment.isEmpty()) {
+      throw new ScheduleException(ErrorStatus.COMMENT_NOT_FOUND);
+    }
+    return isComment.get();
+  }
 
   private Schedule ScheduleValidation(long scheduleId) {
     return scheduleRepository.findById(scheduleId)
