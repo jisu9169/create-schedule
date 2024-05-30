@@ -1,22 +1,23 @@
 package org.sparta.createschedule.entity;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.createschedule.dto.ScheduleRequestDto;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Schedule extends Timestamped {
 
   @Id
@@ -30,6 +31,9 @@ public class Schedule extends Timestamped {
   private String manager;
   @Column(name = "password", nullable = false)
   private String password;
+
+  @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Comment> commentList = new ArrayList<>();
 
   public Schedule(ScheduleRequestDto scheduleRequestDto) {
     this.title = scheduleRequestDto.getTitle();
