@@ -27,7 +27,7 @@ public class ScheduleController {
 
   private final ScheduleService scheduleService;
 
-  @PostMapping("/create")
+  @PostMapping
   @Operation(summary = "일정 생성", description = "일정 생성 API")
   public ResponseEntity<CommonResponse<ScheduleResponseDto>> CreateSchedule(
       @Valid @RequestBody ScheduleRequestDto requestDto) {
@@ -39,10 +39,10 @@ public class ScheduleController {
         .build());
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{scheduleId}")
   @Operation(summary = "일정 단건 조회", description = "일정 단건 조회 API")
-  public ResponseEntity<CommonResponse<ScheduleResponseDto>> getSchedule(@PathVariable Long id) {
-    ScheduleResponseDto scheduleResponseDto = scheduleService.getSchedule(id);
+  public ResponseEntity<CommonResponse<ScheduleResponseDto>> getSchedule(@PathVariable Long scheduleId) {
+    ScheduleResponseDto scheduleResponseDto = scheduleService.getSchedule(scheduleId);
     return ResponseEntity.ok().body(CommonResponse.<ScheduleResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
         .msg("조회가 완료 되었습니다.")
@@ -61,11 +61,12 @@ public class ScheduleController {
         .build());
   }
 
-  @PatchMapping("/patch")
+  @PatchMapping("/{scheduleId}")
   @Operation(summary = "일정 수정", description = "일정 수정 API")
   public ResponseEntity<CommonResponse<ScheduleResponseDto>> UpdateSchedule(
+      @PathVariable Long scheduleId,
       @Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
-    ScheduleResponseDto scheduleResponseDto = scheduleService.updateSchedule(scheduleRequestDto);
+    ScheduleResponseDto scheduleResponseDto = scheduleService.updateSchedule(scheduleId, scheduleRequestDto);
     return ResponseEntity.ok().body(CommonResponse.<ScheduleResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
         .msg("수정이 완료 되었습니다.")
@@ -73,11 +74,12 @@ public class ScheduleController {
         .build());
   }
 
-  @DeleteMapping("/delete")
+  @DeleteMapping("/{scheduleId}")
   @Operation(summary = "일정 삭제", description = "일정 삭제 API")
   public ResponseEntity<CommonResponse<ScheduleResponseDto>> DeleteSchedule(
+      @PathVariable Long scheduleId,
       @Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
-    scheduleService.deleteSchedule(scheduleRequestDto);
+    scheduleService.deleteSchedule(scheduleId,scheduleRequestDto);
     return ResponseEntity.ok().body(CommonResponse.<ScheduleResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
         .msg("삭제가 완료 되었습니다.")

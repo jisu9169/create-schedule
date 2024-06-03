@@ -39,12 +39,14 @@ public class CommentController {
         .build());
   }
 
-  @PatchMapping("/comments/patch")
+  @PatchMapping("/comments/{commentId}")
   public ResponseEntity<CommonResponse<CommentResponseDto>> updateComment(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable Long scheduleId, @RequestBody CommentUpdateRequestDto requestDto) {
+      @PathVariable Long scheduleId,
+      @PathVariable Long commentId,
+      @RequestBody CommentUpdateRequestDto requestDto) {
     CommentResponseDto responseDto = commentService.updateComment(scheduleId, userDetails.getUser(),
-        requestDto);
+        commentId,requestDto);
 
     return ResponseEntity.ok().body(CommonResponse.<CommentResponseDto>builder()
         .statusCode(HttpStatus.OK.value())
@@ -53,7 +55,7 @@ public class CommentController {
         .build());
   }
 
-  @DeleteMapping("/comments/{commentId}/delete")
+  @DeleteMapping("/comments/{commentId}")
   public ResponseEntity<CommonResponse<CommentResponseDto>> deleteComment(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable Long scheduleId, @PathVariable Long commentId) {

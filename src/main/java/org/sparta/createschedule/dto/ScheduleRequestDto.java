@@ -12,7 +12,6 @@ import lombok.Getter;
 @Builder
 public class ScheduleRequestDto {
 
-  private Long id;
   @NotBlank(message = "할일 제목은 필수값입니다.")
   @Size(max = 200, message = "할일 제목은 200자 이내로 입력해주세요.")
   private String title;

@@ -37,8 +37,8 @@ public class ScheduleService {
 
   // 스케줄 수정
   @Transactional
-  public ScheduleResponseDto updateSchedule(ScheduleRequestDto requestDto) {
-    if (!validatePassword(requestDto)) {
+  public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleRequestDto requestDto) {
+    if (!validatePassword(scheduleId, requestDto)) {
       throw new ScheduleException(ErrorStatus.IS_NOT_PASSWORD);
     }
 
@@ -48,16 +48,16 @@ public class ScheduleService {
 
   //스케줄 삭제
   @Transactional
-  public void deleteSchedule(ScheduleRequestDto requestDto) {
-    if (!validatePassword(requestDto)) {
+  public void deleteSchedule(Long scheduleId, ScheduleRequestDto requestDto) {
+    if (!validatePassword(scheduleId, requestDto)) {
       throw new ScheduleException(ErrorStatus.IS_NOT_PASSWORD);
     }
     scheduleRepository.delete(new Schedule(requestDto));
   }
 
   // 비밀번호 검증
-  private boolean validatePassword(ScheduleRequestDto scheduleRequestDto) {
-    Schedule schedule = findBySchedule(scheduleRequestDto.getId());
+  private boolean validatePassword(Long scheduleId, ScheduleRequestDto scheduleRequestDto) {
+    Schedule schedule = findBySchedule(scheduleId);
     if (Objects.equals(scheduleRequestDto.getPassword(), "")) {
       return false;
     }
@@ -68,7 +68,7 @@ public class ScheduleService {
   }
 
   // 스케줄 조회
-  private Schedule findBySchedule(Long id) {
+  public Schedule findBySchedule(Long id) {
     return scheduleRepository.findById(id)
         .orElseThrow(() -> new ScheduleException(ErrorStatus.ID_NOT_FOUND));
   }
